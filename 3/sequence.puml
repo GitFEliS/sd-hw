@@ -1,0 +1,53 @@
+@startuml
+
+autonumber
+
+participant "Конвейер" as conv
+actor "Рабочий" as W
+participant "Система" as sys
+actor "Диспетчер" as D
+participant "Отдел тестирования" as test
+
+activate conv
+[->conv: Поступление автомобиля на конвеер
+conv -> W: Конвейерные работы
+activate W
+conv <-- W: ok
+deactivate W
+
+alt Во время работ обнаружен дефект
+W -> sys: Регистрация дефектов
+
+W -> D: Регистрация в ремонтном отделе
+D -> W: Назначение автомобиля на ремонт
+activate W
+W -> sys: регистрация начала ремонта
+W -> W: ремонт
+W -> sys: отчет о ремонте
+W->conv: возвращение автомобиля на конвеер
+deactivate W
+end
+
+conv -> test: передача автомобиля для тестирования
+activate test
+test -> test: проведение тестирования
+conv <-- test: ok
+deactivate test
+
+alt Во время работ обнаружен дефект
+W -> sys: Регистрация дефектов
+
+W -> D: Регистрация в ремонтном отделе
+D -> W: Назначение автомобиля на ремонт
+activate W
+W -> sys: регистрация начала ремонта
+W -> W: ремонт
+W -> sys: отчет о ремонте
+W->conv: возвращение автомобиля на конвеер
+deactivate W
+end
+
+[<-conv: Отгрузка автомобиля
+
+
+@enduml
