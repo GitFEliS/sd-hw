@@ -1,0 +1,72 @@
+@startuml
+
+class Car {
+  model: string
+  serialNumber: int
+  complection: Map<String, Any>
+}
+
+class Defect {
+  id: int
+  description: string
+  cause: string
+  location: string
+  descriptionOfFix: string
+  WhoFixed: Worker
+  timeOfLocation: DateTime
+  timeOfFix: DateTime
+}
+
+class Worker {
+  id: int
+  firstName: string
+  lastName: string
+  middleName: string
+  job: string
+  +registry(Slot)
+  +stratFixes(List<Defext>)
+  +commitDefects(List<Defext>)
+}
+
+class RepairZone {
+    id: int
+    size: int
+  }
+
+class Slot {
+    time: DateTime
+    event: Enum<FreeSlot, PlannedWork, OccuredWork>
+    carID: int
+    workerID: int
+    defectsID: List<int>
+  }
+
+class Scheduler {
+    zones: List<RepairZone>
+    workers: List<Worker>
+    slots: List<Slot>
+    defects: list<Defect>
+    +schedule(Worker, Car)
+    +changeSchedule(DateTime, Slot)
+    +getReports()
+    +addWorker(Worker)
+    +removeWorker(Worker)
+    +addZone(RepairZone)
+    +removeZone(Worker)
+    +registryDefect(Defect)
+    +changeDefect(Defect, Defect)
+  }
+
+Scheduler "1"*-d- "many" Slot
+Scheduler "1"*-l- "many" Worker
+Scheduler "1"*- "many" RepairZone
+Scheduler "1"*- "many" Defect
+Slot "1"*-d- "many" Defect
+Slot "1"*- "1" RepairZone
+Slot "1"*-u- "1" Worker
+Slot "1"*-l- "1" Car
+
+
+
+
+@enduml
